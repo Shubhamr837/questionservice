@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static co.hackerscode.questionservice.Dao.QuestionDaoConstants.*;
@@ -21,7 +22,7 @@ import static co.hackerscode.questionservice.Dao.QuestionDaoConstants.*;
 public class QuestionServiceController {
     @Autowired
     private QuestionDaoImpl questionDao;
-    @RequestMapping(value = "/addquestion",method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/addQuestion",method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
     public ResponseEntity addQuestion(@RequestBody String jsonString){
         JSONObject jsonObject = new JSONObject(jsonString);
         Question question = new Question();
@@ -37,7 +38,9 @@ public class QuestionServiceController {
         question.setQuestionurl(jsonObject.getString(COLUMN_QUESTIONURL));
         question.setCategory(jsonObject.getString(COLUMN_CATEGORY));
         if(jsonObject.has(COLUMN_SUBCATEGORY))
-        {question.setSub_category(jsonObject.getString(COLUMN_SUBCATEGORY));}
+        {
+            question.setSub_category(jsonObject.getString(COLUMN_SUBCATEGORY));
+        }
         question.setExampleinputurl1(jsonObject.getString(COLUMN_EXAMPLEINPUTURL1));
         question.setExampleoutputurl1(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL1));
         question.setExampleoutputurl2(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL2));
@@ -63,14 +66,14 @@ public class QuestionServiceController {
 
 
     }
-    @RequestMapping(value = "/getquestion",method = RequestMethod.GET , consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/getQuestion",method = RequestMethod.GET , consumes = "application/json", produces = "application/json")
     public ResponseEntity getQuestion(@RequestBody String jsonString)
     {
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONObject jsonResponse = new JSONObject();
         JSONArray jsonArray = new JSONArray();
         List<Question> resultList = null;
-        if(!(jsonObject.has("category"))&&(!jsonObject.has(COLUMN_ID)))
+        if(!(jsonObject.has(COLUMN_CATEGORY))&&(!jsonObject.has(COLUMN_ID)))
         {
             jsonResponse.put("message","no id and category specified");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonResponse.toString());
@@ -85,12 +88,15 @@ public class QuestionServiceController {
         }
         else if(jsonObject.has(COLUMN_ID))
         {
+            System.out.println(jsonObject.getInt(COLUMN_ID));
             Question question = null;
             question = questionDao.getQuestionById(jsonObject.getInt(COLUMN_ID));
-            if(question!=null)
+            if(question!=null){
+             resultList = new ArrayList<>();
              resultList.add(question);
+            }
         }
-        if(resultList.size()==0)
+        if(resultList==null || resultList.size()==0)
         {
             jsonResponse.put("message","no question found for specified category");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(jsonResponse.toString());
@@ -106,7 +112,7 @@ public class QuestionServiceController {
         jsonResponse.put("list",jsonArray);
         return ResponseEntity.ok().body(jsonResponse.toString());
     }
-    @RequestMapping(value = "/updatequestion",method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/updateQuestion",method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
     public ResponseEntity updateQuestion(@RequestBody String jsonString)
     {
         JSONObject jsonResponse ;
@@ -132,7 +138,7 @@ public class QuestionServiceController {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(jsonResponse);
         }
     }
-    @RequestMapping(value = "/deletequestion" , method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/deleteQuestion" , method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
     public ResponseEntity deleteQuestion(@RequestBody String jsonString)
     {
         JSONObject jsonObject = new JSONObject(jsonString);
@@ -154,7 +160,7 @@ public class QuestionServiceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonResponse.toString());
         }
     }
-    @RequestMapping(value = "/getAllquestions",method = RequestMethod.GET , consumes = "application/json", produces = "application/json")
+    @RequestMapping(value = "/getAllQuestions",method = RequestMethod.GET , consumes = "application/json", produces = "application/json")
     public ResponseEntity getAllQuestions(@RequestBody String jsonString)
     {
         JSONObject jsonResponse = new JSONObject();
@@ -162,7 +168,7 @@ public class QuestionServiceController {
         List<Question> resultList = null;
 
         resultList = questionDao.getAll();
-        if(resultList.size()==0)
+        if(resultList == null || resultList.size()==0)
         {
             jsonResponse.put("message","no question found");
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(jsonResponse.toString());

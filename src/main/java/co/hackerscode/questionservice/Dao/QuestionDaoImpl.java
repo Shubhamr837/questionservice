@@ -35,7 +35,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
                 question.setCategory(category);
                 question.setTitle(rs.getString(COLUMN_TITLE));
-                question.setSub_category(rs.getString(COLUMN_SUBCATEGORY));
+                question.setSubcategory(rs.getString(COLUMN_SUBCATEGORY));
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
                 question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
@@ -43,6 +43,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setId(rs.getInt(COLUMN_ID));
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
                 questionList.add(question);
                 System.out.println("Question found = " + question);
 
@@ -81,7 +82,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
                 question.setCategory(rs.getString(COLUMN_CATEGORY));
                 question.setTitle(rs.getString(COLUMN_TITLE));
-                question.setSub_category(rs.getString(COLUMN_SUBCATEGORY));
+                question.setSubcategory(rs.getString(COLUMN_SUBCATEGORY));
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
                 question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
@@ -89,6 +90,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setId(id);
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
                 System.out.println("Question found " + question);
             }else{
                 System.out.println("No Question found with id=" + id);
@@ -126,7 +128,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
                 question.setCategory(category);
                 question.setTitle(rs.getString(COLUMN_TITLE));
-                question.setSub_category(subCategory);
+                question.setSubcategory(subCategory);
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
                 question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
@@ -134,6 +136,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setId(rs.getInt(COLUMN_ID));
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
                 System.out.println("Question found " + question);
                 questionList.add(question);
             }
@@ -156,7 +159,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
     @Override
     public boolean addQuestion(Question question) {
-        String query = "insert into " + TABLE_NAME+" ( title , category , subcategory , exampleinputurl1 , exampleoutputurl1 , exampleinputurl2 , exampleoutputurl2 , questionurl , imageurl ) values (?,?,?,?,?,?,?,?,?);";
+        String query = "insert into " + TABLE_NAME+" ( title , category , subcategory , exampleinputurl1 , exampleoutputurl1 , exampleinputurl2 , exampleoutputurl2 , questionurl , imageurl , difficulty) values (?,?,?,?,?,?,?,?,?,?);";
         Connection con = null;
         PreparedStatement ps = null;
         boolean result = false;
@@ -165,8 +168,8 @@ public class QuestionDaoImpl implements QuestionDao {
             ps = con.prepareStatement(query);
             ps.setString(1 , question.getTitle());
             ps.setString(2, question.getCategory());
-            if(question.getSub_category()!=null)
-             ps.setString(3, question.getSub_category());
+            if(question.getSubcategory()!=null)
+             ps.setString(3, question.getSubcategory());
             else
                 ps.setNull(3, Types.NULL);
             ps.setString(4 , question.getExampleinputurl1());
@@ -174,6 +177,7 @@ public class QuestionDaoImpl implements QuestionDao {
             ps.setString(6, question.getExampleinputurl2());
             ps.setString(7 , question.getExampleoutputurl2());
             ps.setString(8 , question.getQuestionurl());
+            ps.setString(9,question.getDifficulty());
             if(question.getImageurl()!=null)
                 ps.setString(9 , question.getImageurl());
             else
@@ -288,7 +292,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question = new Question();
 
                 question.setTitle(rs.getString(COLUMN_TITLE));
-                question.setSub_category(rs.getString(COLUMN_SUBCATEGORY));
+                question.setSubcategory(rs.getString(COLUMN_SUBCATEGORY));
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
                 question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
@@ -296,6 +300,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setId(rs.getInt(COLUMN_ID));
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
                 questionList.add(question);
                 System.out.println("Question found = " + question);
 

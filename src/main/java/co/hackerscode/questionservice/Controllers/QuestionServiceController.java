@@ -39,12 +39,13 @@ public class QuestionServiceController {
         question.setCategory(jsonObject.getString(COLUMN_CATEGORY));
         if(jsonObject.has(COLUMN_SUBCATEGORY))
         {
-            question.setSub_category(jsonObject.getString(COLUMN_SUBCATEGORY));
+            question.setSubcategory(jsonObject.getString(COLUMN_SUBCATEGORY));
         }
         question.setExampleinputurl1(jsonObject.getString(COLUMN_EXAMPLEINPUTURL1));
         question.setExampleoutputurl1(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL1));
         question.setExampleoutputurl2(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL2));
         question.setExampleinputurl2(jsonObject.getString(COLUMN_EXAMPLEINPUTURL2));
+        question.setDifficulty(jsonObject.getString(COLUMN_DIFFICULTY));
         if(jsonObject.has(COLUMN_IMAGEURL))
         {
             question.setImageurl(jsonObject.getString(COLUMN_IMAGEURL));

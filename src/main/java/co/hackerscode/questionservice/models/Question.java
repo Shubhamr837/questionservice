@@ -13,6 +13,24 @@ public class Question {
     private String exampleoutputurl2=null;
     private String imageurl=null;
 
+    public String getSubcategory() {
+        return subcategory;
+    }
+
+    public void setSubcategory(String subcategory) {
+        this.subcategory = subcategory;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    private String difficulty=null;
+
     public int getId() {
         return id;
     }
@@ -35,14 +53,6 @@ public class Question {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    public String getSub_category() {
-        return subcategory;
-    }
-
-    public void setSub_category(String sub_category) {
-        this.subcategory = sub_category;
     }
 
     public String getQuestionurl() {

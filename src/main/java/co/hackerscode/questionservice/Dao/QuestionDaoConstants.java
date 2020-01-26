@@ -11,5 +11,7 @@ public class QuestionDaoConstants {
     public static final String COLUMN_IMAGEURL = "imageurl";
     public static final String COLUMN_QUESTIONURL = "questionurl";
     public static final String COLUMN_ID = "id";
+    public static final String COLUMN_DIFFICULTY = "difficulty";
     public static final String TABLE_NAME = "Questions";
+
 }

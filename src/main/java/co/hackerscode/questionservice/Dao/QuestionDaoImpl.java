@@ -241,12 +241,79 @@ public class QuestionDaoImpl implements QuestionDao {
     @Override
     public boolean deleteQuestion(int id) {
         boolean result= false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        String query = "delete from " + TABLE_NAME + " where id = ? ;";
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id );
+            int out = ps.executeUpdate();
+            if(out !=0){
+                System.out.println("Question deleted with id = " + id);
+                result = true;
+            }else
+            {
+                result = false;
+                System.out.println("Question delete failed , question id = " + id);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            result = false;
+        }finally{
+            try {
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
 
         return result;
     }
 
     @Override
     public List<Question> getAll() {
-        return null;
+        String query = "select * from " + TABLE_NAME + " ;";
+        Question question = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Question> questionList = new ArrayList<>();
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                question = new Question();
+
+                question.setTitle(rs.getString(COLUMN_TITLE));
+                question.setSub_category(rs.getString(COLUMN_SUBCATEGORY));
+                question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
+                question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
+                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
+                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setId(rs.getInt(COLUMN_ID));
+                question.setQuestionurl(COLUMN_QUESTIONURL);
+                question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                questionList.add(question);
+                System.out.println("Question found = " + question);
+
+            }
+            if(questionList.size()==0) {
+                System.out.println("No Question found");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                rs.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return questionList;
     }
 }

@@ -131,5 +131,51 @@ public class QuestionServiceController {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(jsonResponse);
         }
     }
+    @RequestMapping(value = "/deletequestion" , method = RequestMethod.POST , consumes = "application/json", produces = "application/json")
+    public ResponseEntity deleteQuestion(@RequestBody String jsonString)
+    {
+        JSONObject jsonObject = new JSONObject(jsonString);
+        JSONObject jsonResponse = new JSONObject();
+
+        if(!jsonObject.has(COLUMN_ID))
+        {
+            jsonResponse.put("message" , "bad request");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(jsonResponse.toString());
+        }
+        if(questionDao.deleteQuestion(jsonObject.getInt(COLUMN_ID)))
+        {
+            jsonResponse.put("deleted question", jsonObject);
+            return ResponseEntity.ok().body(jsonResponse.toString());
+        }
+        else
+        {
+            jsonResponse.put("message", "internal server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(jsonResponse.toString());
+        }
+    }
+    @RequestMapping(value = "/getAllquestions",method = RequestMethod.GET , consumes = "application/json", produces = "application/json")
+    public ResponseEntity getAllQuestions(@RequestBody String jsonString)
+    {
+        JSONObject jsonResponse = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        List<Question> resultList = null;
+
+        resultList = questionDao.getAll();
+        if(resultList.size()==0)
+        {
+            jsonResponse.put("message","no question found");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(jsonResponse.toString());
+        }
+        else
+        {
+            jsonResponse.put("count", resultList.size());
+        }
+        for(Question question : resultList)
+        {
+            jsonArray.put(new JSONObject(question));
+        }
+        jsonResponse.put("list",jsonArray);
+        return ResponseEntity.ok().body(jsonResponse.toString());
+    }
 
 }

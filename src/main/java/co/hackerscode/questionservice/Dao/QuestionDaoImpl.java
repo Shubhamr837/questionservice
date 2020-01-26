@@ -1,0 +1,252 @@
+package co.hackerscode.questionservice.Dao;
+
+import co.hackerscode.questionservice.models.Question;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static co.hackerscode.questionservice.Dao.QuestionDaoConstants.*;
+
+@Repository
+public class QuestionDaoImpl implements QuestionDao {
+
+    @Autowired
+    DataSource dataSource;
+    @Override
+    public List<Question> getQuestionByCategory(String category) {
+        String query = "select * from " + TABLE_NAME + " where category = ? ;";
+        Question question = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Question> questionList = new ArrayList<>();
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, category);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                question = new Question();
+
+                question.setCategory(category);
+                question.setTitle(rs.getString(COLUMN_TITLE));
+                question.setSub_category(rs.getString(COLUMN_SUBCATEGORY));
+                question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
+                question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
+                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
+                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setId(rs.getInt(COLUMN_ID));
+                question.setQuestionurl(COLUMN_QUESTIONURL);
+                question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                questionList.add(question);
+                System.out.println("Question found = " + question);
+
+            }
+           if(questionList.size()==0) {
+                System.out.println("No Question found with category=" + category);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                rs.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return questionList;
+    }
+
+    @Override
+    public Question getQuestionById(int id) {
+        String query = "select * from " + TABLE_NAME + " where id = ? ;";
+        Question question = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1,id);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                question = new Question();
+
+                question.setCategory(rs.getString(COLUMN_CATEGORY));
+                question.setTitle(rs.getString(COLUMN_TITLE));
+                question.setSub_category(rs.getString(COLUMN_SUBCATEGORY));
+                question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
+                question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
+                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
+                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setId(id);
+                question.setQuestionurl(COLUMN_QUESTIONURL);
+                question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                System.out.println("Question found " + question);
+            }else{
+                System.out.println("No Question found with id=" + id);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                rs.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return question;
+    }
+
+    @Override
+    public List<Question> getQuestionByCategoryAndSubCategory(String category, String subCategory) {
+        String query = "select * from " + TABLE_NAME + " where category = ? and subcategory = ? ;";
+        Question question = null;
+        List<Question> questionList = new ArrayList<>();
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1, category);
+            ps.setString(2 , subCategory);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                question = new Question();
+
+                question.setCategory(category);
+                question.setTitle(rs.getString(COLUMN_TITLE));
+                question.setSub_category(subCategory);
+                question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
+                question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
+                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
+                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setId(rs.getInt(COLUMN_ID));
+                question.setQuestionurl(COLUMN_QUESTIONURL);
+                question.setImageurl(rs.getString(COLUMN_IMAGEURL));
+                System.out.println("Question found " + question);
+                questionList.add(question);
+            }
+            if(questionList.size()==0){
+                System.out.println("No Question found with category and subcategory=" + category + " " + subCategory);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                rs.close();
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return questionList;
+    }
+
+    @Override
+    public boolean addQuestion(Question question) {
+        String query = "insert into " + TABLE_NAME+" ( title , category , subcategory , exampleinputurl1 , exampleoutputurl1 , exampleinputurl2 , exampleoutputurl2 , questionurl , imageurl ) values (?,?,?,?,?,?,?,?,?);";
+        Connection con = null;
+        PreparedStatement ps = null;
+        boolean result = false;
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setString(1 , question.getTitle());
+            ps.setString(2, question.getCategory());
+            if(question.getSub_category()!=null)
+             ps.setString(3, question.getSub_category());
+            else
+                ps.setNull(3, Types.NULL);
+            ps.setString(4 , question.getExampleinputurl1());
+            ps.setString(5 , question.getExampleoutputurl1());
+            ps.setString(6, question.getExampleinputurl2());
+            ps.setString(7 , question.getExampleoutputurl2());
+            ps.setString(8 , question.getQuestionurl());
+            if(question.getImageurl()!=null)
+                ps.setString(9 , question.getImageurl());
+            else
+                ps.setNull(9 , Types.NULL);
+            int out = ps.executeUpdate();
+            if(out !=0){
+                result= true;
+                System.out.println("Question saved with title " + question.getTitle());
+            }else {System.out.println("Question save failed with title = "+ question.getTitle());
+                result = false;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }finally{
+            try {
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean updateQuestion(JSONObject jsonObject , int id) {
+        boolean result = false ;
+        Connection con = null;
+        PreparedStatement ps = null;
+        String query = "update Questions set";
+
+        for( String key : jsonObject.keySet())
+        {
+         query = query + " " + key + "=" + jsonObject.getString(key);
+        }
+
+        query = query + " " + "where id=?;";
+        try{
+            con = dataSource.getConnection();
+            ps = con.prepareStatement(query);
+            ps.setInt(1, id );
+            int out = ps.executeUpdate();
+            if(out !=0){
+                System.out.println("Question updated with id = " + id);
+                result = true;
+            }else
+            {
+                result = false;
+                System.out.println("Question Update failed , question id = " + id);
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+            result = false;
+        }finally{
+            try {
+                ps.close();
+                con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean deleteQuestion(int id) {
+        boolean result= false;
+
+        return result;
+    }
+
+    @Override
+    public List<Question> getAll() {
+        return null;
+    }
+}

@@ -25,7 +25,7 @@ public class QuestionServiceController {
     public ResponseEntity addQuestion(@RequestBody String jsonString){
         JSONObject jsonObject = new JSONObject(jsonString);
         Question question = new Question();
-        if(!(jsonObject.has("password")&&jsonObject.getString("password")=="Dtbranger"))
+        if(!(jsonObject.has("password")&&jsonObject.getString("password").equals("Dtbranger")))
         {
             JSONObject jsonResponse = new JSONObject();
             jsonResponse.put("message", "password didnt match");
@@ -36,7 +36,8 @@ public class QuestionServiceController {
         question.setTitle(jsonObject.getString(COLUMN_TITLE));
         question.setQuestionurl(jsonObject.getString(COLUMN_QUESTIONURL));
         question.setCategory(jsonObject.getString(COLUMN_CATEGORY));
-        question.setSub_category(jsonObject.getString(COLUMN_SUBCATEGORY));
+        if(jsonObject.has(COLUMN_SUBCATEGORY))
+        {question.setSub_category(jsonObject.getString(COLUMN_SUBCATEGORY));}
         question.setExampleinputurl1(jsonObject.getString(COLUMN_EXAMPLEINPUTURL1));
         question.setExampleoutputurl1(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL1));
         question.setExampleoutputurl2(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL2));

@@ -18,8 +18,8 @@ public class QuestionDaoImpl implements QuestionDao {
     @Autowired
     DataSource dataSource;
     @Override
-    public List<Question> getQuestionByCategory(String category) {
-        String query = "select * from " + TABLE_NAME + " where category = ? ;";
+    public List<Question> getQuestionByCategory(String category, int page) {
+        String query = "select * from " + TABLE_NAME + " where category = ? limit ? offset ?;";
         Question question = null;
         Connection con = null;
         PreparedStatement ps = null;
@@ -29,6 +29,8 @@ public class QuestionDaoImpl implements QuestionDao {
             con = dataSource.getConnection();
             ps = con.prepareStatement(query);
             ps.setString(1, category);
+            ps.setInt(2, 10);
+            ps.setInt(3, page * 10);
             rs = ps.executeQuery();
             while(rs.next()){
                 question = new Question();
@@ -110,8 +112,8 @@ public class QuestionDaoImpl implements QuestionDao {
     }
 
     @Override
-    public List<Question> getQuestionByCategoryAndSubCategory(String category, String subCategory) {
-        String query = "select * from " + TABLE_NAME + " where category = ? and subcategory = ? ;";
+    public List<Question> getQuestionByCategoryAndSubCategory(String category, String subCategory, int page) {
+        String query = "select * from " + TABLE_NAME + " where category = ? and subcategory = ? limit ? offset ?;";
         Question question = null;
         List<Question> questionList = new ArrayList<>();
         Connection con = null;
@@ -122,6 +124,8 @@ public class QuestionDaoImpl implements QuestionDao {
             ps = con.prepareStatement(query);
             ps.setString(1, category);
             ps.setString(2 , subCategory);
+            ps.setInt(3, 10);
+            ps.setInt(4, page * 10);
             rs = ps.executeQuery();
             while(rs.next()){
                 question = new Question();
@@ -177,7 +181,7 @@ public class QuestionDaoImpl implements QuestionDao {
             ps.setString(6, question.getExampleinputurl2());
             ps.setString(7 , question.getExampleoutputurl2());
             ps.setString(8 , question.getQuestionurl());
-            ps.setString(9,question.getDifficulty());
+            ps.setString(10, question.getDifficulty());
             if(question.getImageurl()!=null)
                 ps.setString(9 , question.getImageurl());
             else

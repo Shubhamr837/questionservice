@@ -8,10 +8,7 @@ import org.json.JSONString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +65,7 @@ public class QuestionServiceController {
 
     }
     @RequestMapping(value = "/getQuestion",method = RequestMethod.GET , consumes = "application/json", produces = "application/json")
-    public ResponseEntity getQuestion(@RequestBody String jsonString)
+    public ResponseEntity getQuestion(@RequestBody String jsonString, @RequestParam(required = false) int page)
     {
         JSONObject jsonObject = new JSONObject(jsonString);
         JSONObject jsonResponse = new JSONObject();
@@ -81,11 +78,11 @@ public class QuestionServiceController {
         }
         if((jsonObject.has(COLUMN_CATEGORY))&&(!jsonObject.has(COLUMN_SUBCATEGORY)) && (!jsonObject.has(COLUMN_ID)))
         {
-           resultList = questionDao.getQuestionByCategory(jsonObject.getString(COLUMN_CATEGORY));
+            resultList = questionDao.getQuestionByCategory(jsonObject.getString(COLUMN_CATEGORY), page);
         }
         else if(jsonObject.has(COLUMN_SUBCATEGORY))
         {
-            resultList = questionDao.getQuestionByCategoryAndSubCategory(jsonObject.getString(COLUMN_CATEGORY),jsonObject.getString(COLUMN_SUBCATEGORY));
+            resultList = questionDao.getQuestionByCategoryAndSubCategory(jsonObject.getString(COLUMN_CATEGORY), jsonObject.getString(COLUMN_SUBCATEGORY), page);
         }
         else if(jsonObject.has(COLUMN_ID))
         {

@@ -22,7 +22,7 @@ public class JpaConfig {
         DataSource dataSource ;
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
-        dataSourceBuilder.url("jdbc:mysql://localhost:3306/default");
+        dataSourceBuilder.url("jdbc:mysql://localhost:3306/registration_02");
         dataSourceBuilder.username("shubham");
         dataSourceBuilder.password("Dtbranger1@");
 

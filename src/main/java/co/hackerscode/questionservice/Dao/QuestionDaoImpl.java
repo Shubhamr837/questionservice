@@ -47,7 +47,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
                 question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
                 questionList.add(question);
-                System.out.println("Question found = " + question);
+                System.out.println("Question found = " + question.getId());
 
             }
            if(questionList.size()==0) {

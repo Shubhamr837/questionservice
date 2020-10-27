@@ -9,6 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>co.hackerscode.questionservice</groupId>
+	<packaging>jar</packaging>
 	<artifactId>questionservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>questionservice</name>

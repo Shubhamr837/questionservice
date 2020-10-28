@@ -42,8 +42,11 @@ public class AddQuestionServiceController {
         }
         question.setExampleinputurl1(jsonObject.getString(COLUMN_EXAMPLEINPUTURL1));
         question.setExampleoutputurl1(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL1));
-        question.setExampleoutputurl2(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL2));
-        question.setExampleinputurl2(jsonObject.getString(COLUMN_EXAMPLEINPUTURL2));
+
+        if(jsonObject.has(COLUMN_EXAMPLEINPUTURL2)){
+            question.setExampleoutputurl2(jsonObject.getString(COLUMN_EXAMPLEOUTPUTURL2));
+            question.setExampleinputurl2(jsonObject.getString(COLUMN_EXAMPLEINPUTURL2));
+        }
         question.setDifficulty(jsonObject.getString(COLUMN_DIFFICULTY));
         if(jsonObject.has(COLUMN_IMAGEURL))
         {

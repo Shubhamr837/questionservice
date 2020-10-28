@@ -90,7 +90,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
                 question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
                 question.setId(id);
-                question.setQuestionurl(COLUMN_QUESTIONURL);
+                question.setQuestionurl(rs.getString(COLUMN_QUESTIONURL));
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
                 question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
                 System.out.println("Question found " + question);

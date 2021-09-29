@@ -40,8 +40,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setSubcategory(rs.getString(COLUMN_SUBCATEGORY));
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
-                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
-                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setScore(rs.getInt(COLUMN_SCORE));
                 question.setId(rs.getInt(COLUMN_ID));
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
@@ -87,13 +86,12 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setSubcategory(rs.getString(COLUMN_SUBCATEGORY));
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
-                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
-                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setScore(rs.getInt(COLUMN_SCORE));
                 question.setId(id);
                 question.setQuestionurl(rs.getString(COLUMN_QUESTIONURL));
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
                 question.setDifficulty(rs.getString(COLUMN_DIFFICULTY));
-                System.out.println("Question found " + question);
+                System.out.println("Question found " + question.getQuestionurl());
             }else{
                 System.out.println("No Question found with id=" + id);
             }
@@ -135,8 +133,7 @@ public class QuestionDaoImpl implements QuestionDao {
                 question.setSubcategory(subCategory);
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
-                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
-                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setScore(rs.getInt(COLUMN_SCORE));
                 question.setId(rs.getInt(COLUMN_ID));
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));
@@ -163,7 +160,7 @@ public class QuestionDaoImpl implements QuestionDao {
 
     @Override
     public boolean addQuestion(Question question) {
-        String query = "insert into " + TABLE_NAME+" ( title , category , subcategory , exampleinputurl1 , exampleoutputurl1 , exampleinputurl2 , exampleoutputurl2 , questionurl , imageurl , difficulty) values (?,?,?,?,?,?,?,?,?,?);";
+        String query = "insert into " + TABLE_NAME+" ( title , category , subcategory , exampleinputurl1 , exampleoutputurl1 , questionurl , imageurl , difficulty, score) values (?,?,?,?,?,?,?,?,?);";
         Connection con = null;
         PreparedStatement ps = null;
         boolean result = false;
@@ -178,14 +175,14 @@ public class QuestionDaoImpl implements QuestionDao {
                 ps.setNull(3, Types.NULL);
             ps.setString(4 , question.getExampleinputurl1());
             ps.setString(5 , question.getExampleoutputurl1());
-            ps.setString(6, question.getExampleinputurl2());
-            ps.setString(7 , question.getExampleoutputurl2());
-            ps.setString(8 , question.getQuestionurl());
-            ps.setString(10, question.getDifficulty());
+            ps.setString(6 , question.getQuestionurl());
             if(question.getImageurl()!=null)
-                ps.setString(9 , question.getImageurl());
+                ps.setString(7 , question.getImageurl());
             else
-                ps.setNull(9 , Types.NULL);
+                ps.setNull(7 , Types.NULL);
+
+            ps.setString(8, question.getDifficulty());
+            ps.setString(9, String.valueOf(question.getScore()));
             int out = ps.executeUpdate();
             if(out !=0){
                 result= true;
@@ -294,13 +291,12 @@ public class QuestionDaoImpl implements QuestionDao {
             rs = ps.executeQuery();
             while(rs.next()){
                 question = new Question();
-
+                question.setCategory(rs.getString(COLUMN_CATEGORY));
                 question.setTitle(rs.getString(COLUMN_TITLE));
                 question.setSubcategory(rs.getString(COLUMN_SUBCATEGORY));
                 question.setExampleinputurl1(rs.getString(COLUMN_EXAMPLEINPUTURL1));
                 question.setExampleoutputurl1(rs.getString(COLUMN_EXAMPLEOUTPUTURL1));
-                question.setExampleinputurl2(rs.getString(COLUMN_EXAMPLEINPUTURL2));
-                question.setExampleoutputurl2(rs.getString(COLUMN_EXAMPLEOUTPUTURL2));
+                question.setScore(rs.getInt(COLUMN_SCORE));
                 question.setId(rs.getInt(COLUMN_ID));
                 question.setQuestionurl(COLUMN_QUESTIONURL);
                 question.setImageurl(rs.getString(COLUMN_IMAGEURL));

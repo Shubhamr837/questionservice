@@ -7,10 +7,19 @@ public class Question {
     private String category=null;
     private String subcategory=null;
     private String questionurl=null;
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    private int score = 0;
+
     private String exampleinputurl1=null;
     private String exampleoutputurl1=null;
-    private String exampleinputurl2=null;
-    private String exampleoutputurl2=null;
     private String imageurl=null;
 
     public String getSubcategory() {
@@ -77,22 +86,6 @@ public class Question {
 
     public void setExampleoutputurl1(String exampleoutputurl1) {
         this.exampleoutputurl1 = exampleoutputurl1;
-    }
-
-    public String getExampleinputurl2() {
-        return exampleinputurl2;
-    }
-
-    public void setExampleinputurl2(String exampleinputurl2) {
-        this.exampleinputurl2 = exampleinputurl2;
-    }
-
-    public String getExampleoutputurl2() {
-        return exampleoutputurl2;
-    }
-
-    public void setExampleoutputurl2(String exampleoutputurl2) {
-        this.exampleoutputurl2 = exampleoutputurl2;
     }
 
     public String getImageurl() {

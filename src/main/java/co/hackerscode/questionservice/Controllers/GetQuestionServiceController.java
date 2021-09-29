@@ -5,6 +5,7 @@ import co.hackerscode.questionservice.models.Question;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +66,11 @@ public class GetQuestionServiceController {
             jsonArray.put(new JSONObject(question));
         }
         jsonResponse.put("list",jsonArray);
-        return ResponseEntity.ok().body(jsonResponse.toString());
+        HttpHeaders resHeaders = new HttpHeaders();
+        resHeaders.add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+        resHeaders.add("Access-Control-Allow-Origin", "*");
+        resHeaders.add("Access-Control-Allow-Headers", "*");
+        return ResponseEntity.ok().headers(resHeaders).body(jsonResponse.toString());
     }
 
     @RequestMapping(value = "/updateQuestion",method = RequestMethod.POST , produces = "application/json")
@@ -86,12 +91,20 @@ public class GetQuestionServiceController {
         {
             jsonResponse = new JSONObject();
             jsonResponse.put("message" , "Success , Question with id = " + id + " updated");
-            return ResponseEntity.ok().body(jsonResponse);
+            HttpHeaders resHeaders = new HttpHeaders();
+            resHeaders.add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+            resHeaders.add("Access-Control-Allow-Origin", "*");
+            resHeaders.add("Access-Control-Allow-Headers", "*");
+            return ResponseEntity.ok().headers(resHeaders).body(jsonResponse);
         }
         else {
             jsonResponse =  new JSONObject();
             jsonResponse.put("message" , "unown error");
-            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(jsonResponse);
+            HttpHeaders resHeaders = new HttpHeaders();
+            resHeaders.add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+            resHeaders.add("Access-Control-Allow-Origin", "*");
+            resHeaders.add("Access-Control-Allow-Headers", "*");
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).headers(resHeaders).body(jsonResponse);
         }
     }
     @RequestMapping(value = "/deleteQuestion" , method = RequestMethod.POST ,  produces = "application/json")
@@ -117,7 +130,7 @@ public class GetQuestionServiceController {
         }
     }
     @RequestMapping(value = "/getAllQuestions",method = RequestMethod.GET )
-    public ResponseEntity getAllQuestions(@RequestBody String jsonString)
+    public ResponseEntity getAllQuestions(@RequestBody(required = false) String jsonString)
     {
         JSONObject jsonResponse = new JSONObject();
         JSONArray jsonArray = new JSONArray();
@@ -138,7 +151,12 @@ public class GetQuestionServiceController {
             jsonArray.put(new JSONObject(question));
         }
         jsonResponse.put("list",jsonArray);
-        return ResponseEntity.ok().body(jsonResponse.toString());
+        System.out.println(jsonArray.length()+" Questions Returned");
+        HttpHeaders resHeaders = new HttpHeaders();
+        resHeaders.add("Access-Control-Allow-Methods", "POST, OPTIONS, GET");
+        resHeaders.add("Access-Control-Allow-Origin", "*");
+        resHeaders.add("Access-Control-Allow-Headers", "*");
+        return ResponseEntity.ok().headers(resHeaders).body(jsonResponse.toString());
     }
 
 }
